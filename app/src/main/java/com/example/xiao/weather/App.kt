@@ -1,7 +1,7 @@
 package com.example.xiao.weather
 
 import android.app.Application
-import com.example.xiao.weather.utils.DelegateExt
+import com.example.xiao.weather.utils.ext.DelegateExt
 
 /**
  * Created by xiao on 2017/5/27.

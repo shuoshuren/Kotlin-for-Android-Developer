@@ -13,7 +13,7 @@ import com.example.xiao.weather.domain.Forecast as ModelForecast
 public class ForecastDataMapper {
 
     fun convertFromDataModule(forecast:ForecastResult):ForecastList{
-        return ForecastList(forecast.city.name,forecast.city.country,convertForecastListToDomain(forecast.list))
+        return ForecastList(forecast.city.id,forecast.city.name,forecast.city.country,convertForecastListToDomain(forecast.list))
     }
 
     private fun convertForecastListToDomain(list: List<Forecast>): List<ModelForecast> {
