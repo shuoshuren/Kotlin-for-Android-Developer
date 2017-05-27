@@ -8,6 +8,8 @@ import com.example.xiao.weather.db.table.DayForecastTable
 import org.jetbrains.anko.db.*
 
 /**
+ * DBHelper
+ *
  * Created by xiao on 2017/5/27.
  */
 
