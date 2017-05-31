@@ -5,6 +5,7 @@ import com.example.xiao.weather.db.model.DayForecast
 import com.example.xiao.weather.db.table.CityForecastTable
 import com.example.xiao.weather.db.table.DayForecastTable
 import com.example.xiao.weather.domain.ForecastList
+import com.example.xiao.weather.provider.ForecastDataSource
 import com.example.xiao.weather.utils.ext.clear
 import com.example.xiao.weather.utils.ext.parseList
 import com.example.xiao.weather.utils.ext.parseOpt
@@ -12,13 +13,27 @@ import com.example.xiao.weather.utils.ext.toVarargArray
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import java.util.*
+import kotlin.NoSuchElementException
 
 
 /**
  * Created by xiao on 2017/5/27.
  */
 class ForecastDb(val dbHelper:ForecastDbHelper = ForecastDbHelper.instance,
-        val dataMapper: DbDataMapper = DbDataMapper()) {
+        val dataMapper: DbDataMapper = DbDataMapper()):ForecastDataSource {
+
+    override fun requestForecastByZipCode(zipCode: Long, date: Long) = dbHelper.use {
+        val dailyRequest = "${DayForecastTable.CITY_ID} = ? AND ${DayForecastTable.DATE} >= ?"
+        val dailyForecast = select(DayForecastTable.NAME)
+                .whereSimple(dailyRequest, zipCode.toString(), date.toString())
+                .parseList { DayForecast(HashMap(it)) }
+
+        val city = select(CityForecastTable.NAME)
+                .whereSimple("${CityForecastTable.ID} = ?", zipCode.toString())
+                .parseOpt { CityForecast(HashMap(it), dailyForecast) }
+
+        city?.let { dataMapper.convertToDomain(it) }
+    }
 
     fun requestForecastByZipCode(zipCode:Long,date:Date) = dbHelper.use {
 
