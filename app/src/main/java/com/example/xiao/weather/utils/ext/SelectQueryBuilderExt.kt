@@ -1,6 +1,5 @@
 package com.example.xiao.weather.utils.ext
 
-import org.jetbrains.anko.db.MapRowParser
 import org.jetbrains.anko.db.SelectQueryBuilder
 
 /**
@@ -19,5 +18,7 @@ public fun <T : Any> org.jetbrains.anko.db.SelectQueryBuilder.parseOpt(parser: (
         override fun parseRow(columns: Map<String, Any?>): T = parser(columns)
     })
 }
+
+fun SelectQueryBuilder.byId(id:Long):SelectQueryBuilder = whereSimple("_id = ? ",id.toString())
 
 

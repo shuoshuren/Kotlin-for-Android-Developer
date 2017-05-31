@@ -1,6 +1,7 @@
 package com.example.xiao.weather.provider
 
 import com.example.xiao.weather.db.ForecastDb
+import com.example.xiao.weather.domain.Forecast
 import com.example.xiao.weather.domain.ForecastList
 import com.example.xiao.weather.server.ForecastServer
 
@@ -14,7 +15,21 @@ class ForecastProvider(val source: List<ForecastDataSource> = ForecastProvider.S
     }
 
     fun requestByZipCode(zipCode: Long,days: Int):ForecastList{
-        return source.firstResult { requestSource(it,days,zipCode) }
+
+        val res = ForecastServer().requestForecastByZipCode(zipCode,todayTimeSpan())
+        if(res!=null && res.dailyForecast.size>=days){
+            return res
+        }
+        throw NoSuchElementException()
+    }
+
+    fun requestForecast(id:Long): Forecast{
+        val result = ForecastDb().requestDayForecast(id)
+        if(result != null){
+            return result
+        }
+        throw NoSuchElementException()
+
     }
 
     private fun todayTimeSpan() = System.currentTimeMillis()/ DAY_IN_MILLES
@@ -31,6 +46,8 @@ class ForecastProvider(val source: List<ForecastDataSource> = ForecastProvider.S
         }
         throw NoSuchElementException("No element matching predicate was found.")
     }
+
+    private fun <T:Any> requestToSources(f:(ForecastDataSource) -> T?):T = source.firstResult { f(it) }
 
 }
 

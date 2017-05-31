@@ -1,6 +1,6 @@
 package com.example.xiao.weather.server
 
-import com.example.xiao.weather.domain.Command
+import com.example.xiao.weather.command.Command
 import com.example.xiao.weather.domain.ForecastList
 import com.example.xiao.weather.provider.ForecastProvider
 
@@ -8,7 +8,7 @@ import com.example.xiao.weather.provider.ForecastProvider
  * Created by xiao on 2017/5/31.
  */
 
-class RequestForecastCommand(val zipCode:Long,val forecastProvider: ForecastProvider = ForecastProvider()):Command<ForecastList>{
+class RequestForecastCommand(val zipCode:Long,val forecastProvider: ForecastProvider = ForecastProvider()): Command<ForecastList> {
 
     companion object{
         val DAYS = 7

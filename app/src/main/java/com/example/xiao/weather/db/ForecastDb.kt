@@ -1,19 +1,17 @@
 package com.example.xiao.weather.db
 
+import android.util.Log
 import com.example.xiao.weather.db.model.CityForecast
 import com.example.xiao.weather.db.model.DayForecast
 import com.example.xiao.weather.db.table.CityForecastTable
 import com.example.xiao.weather.db.table.DayForecastTable
+import com.example.xiao.weather.domain.Forecast
 import com.example.xiao.weather.domain.ForecastList
 import com.example.xiao.weather.provider.ForecastDataSource
-import com.example.xiao.weather.utils.ext.clear
-import com.example.xiao.weather.utils.ext.parseList
-import com.example.xiao.weather.utils.ext.parseOpt
-import com.example.xiao.weather.utils.ext.toVarargArray
+import com.example.xiao.weather.utils.ext.*
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import java.util.*
-import kotlin.NoSuchElementException
 
 
 /**
@@ -21,6 +19,13 @@ import kotlin.NoSuchElementException
  */
 class ForecastDb(val dbHelper:ForecastDbHelper = ForecastDbHelper.instance,
         val dataMapper: DbDataMapper = DbDataMapper()):ForecastDataSource {
+
+    override fun requestDayForecast(id: Long): Forecast? = dbHelper.use {
+        val forecast = select(DayForecastTable.NAME).byId(id).parseOpt{ DayForecast(HashMap(it)) }
+        Log.i("xc","requestDayForecast: forecast:"+forecast+",id="+id)
+        if(forecast != null) dataMapper.convertDayToDomain(forecast) else null
+
+    }
 
     override fun requestForecastByZipCode(zipCode: Long, date: Long) = dbHelper.use {
         val dailyRequest = "${DayForecastTable.CITY_ID} = ? AND ${DayForecastTable.DATE} >= ?"
@@ -33,23 +38,6 @@ class ForecastDb(val dbHelper:ForecastDbHelper = ForecastDbHelper.instance,
                 .parseOpt { CityForecast(HashMap(it), dailyForecast) }
 
         city?.let { dataMapper.convertToDomain(it) }
-    }
-
-    fun requestForecastByZipCode(zipCode:Long,date:Date) = dbHelper.use {
-
-        val dailyRequest = "${DayForecastTable.CITY_ID} = {id} "+ " AND ${DayForecastTable.DATE} >= {date}"
-
-        val dailyForecast = select(DayForecastTable.NAME)
-                .whereArgs(dailyRequest,"id" to zipCode,"date" to date)
-                .parseList { DayForecast(HashMap(it)) }
-
-
-        val city = select(CityForecastTable.NAME)
-                .whereSimple("${CityForecastTable.ID} = ?", zipCode.toString())
-                .parseOpt { CityForecast(HashMap(it), dailyForecast) }
-
-        if ( city != null) dataMapper.convertToDomain(city) else null
-
     }
 
     fun saveForecast(forecast:ForecastList) = dbHelper.use {

@@ -1,5 +1,6 @@
 package com.example.xiao.weather.provider
 
+import com.example.xiao.weather.domain.Forecast
 import com.example.xiao.weather.domain.ForecastList
 
 /**
@@ -7,4 +8,5 @@ import com.example.xiao.weather.domain.ForecastList
  */
 interface ForecastDataSource {
     fun requestForecastByZipCode(zipCode:Long,date:Long):ForecastList?
+    fun requestDayForecast(id: Long): Forecast?
 }

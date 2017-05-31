@@ -1,4 +1,4 @@
-package com.example.xiao.weather.domain
+package com.example.xiao.weather.command
 
 /**
  * Created by xiao on 2017/5/27.
