@@ -1,6 +1,5 @@
 package com.example.xiao.weather.server
 
-import com.example.xiao.weather.ForecastRequest
 import com.example.xiao.weather.db.ForecastDb
 import com.example.xiao.weather.domain.Forecast
 import com.example.xiao.weather.domain.ForecastList
