@@ -7,6 +7,7 @@ import com.example.xiao.weather.App
 import com.example.xiao.weather.R
 import com.example.xiao.weather.utils.ext.slideEnter
 import com.example.xiao.weather.utils.ext.slideExit
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 /**
@@ -24,7 +25,7 @@ interface ToolbarManager {
         toolbar.inflateMenu(R.menu.menu_main)
         toolbar.setOnMenuItemClickListener {
             when(it.itemId){
-                R.id.action_setting-> App.instance.toast("setting")
+                R.id.action_setting-> toolbar.context.startActivity<SettingActivity>()
                 else -> App.instance.toast("UnKnow option")
 
             }

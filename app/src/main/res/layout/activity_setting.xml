@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:padding="16dp">
+
+
+        <EditText
+            android:id="@+id/cityCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="16dp"
+            android:inputType="number"/>
+
+    </LinearLayout>
+</FrameLayout>

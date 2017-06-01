@@ -1,5 +1,9 @@
 package com.example.xiao.weather.utils.ext
 
+import android.content.Context
+import com.example.xiao.weather.utils.LongPreference
+import com.example.xiao.weather.utils.NotNullSingleValueVar
+import com.example.xiao.weather.utils.Preference
 import kotlin.properties.ReadWriteProperty
 
 /**
@@ -8,6 +12,9 @@ import kotlin.properties.ReadWriteProperty
 
 
 object DelegateExt {
-    fun <T> notNullSingleValue():
-            kotlin.properties.ReadWriteProperty<Any?, T> = com.example.xiao.weather.utils.NotNullSingleValueVar()
+    fun <T> notNullSingleValue(): ReadWriteProperty<Any?, T> = NotNullSingleValueVar()
+
+    fun longPreference(context: Context,name:String,default:Long ) = LongPreference(context,name,default)
+
+    fun <T> preference(context: Context,name:String,default: T) = Preference<T>(context, name, default)
 }
